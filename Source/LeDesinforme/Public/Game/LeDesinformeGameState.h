@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "LeDesinformeGameMode.h"
 #include "GameFramework/GameStateBase.h"
 #include "LeDesinformeGameState.generated.h"
 
@@ -12,15 +11,26 @@ class LEDESINFORME_API ALeDesinformeGameState : public AGameStateBase
 	GENERATED_BODY()
 
 private:
-	int m_currentScore = 0;
+	int m_score = 0;
+	int m_highScore = 0;
 	
 	float m_timer = 0.f;
 
-	ALeDesinformeGameMode* m_gameMode = nullptr;
+	FString m_saveFilePath;
 
 public:
 	ALeDesinformeGameState();
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float _deltaSeconds) override;
+
+public:
+	void IncrementScore();
+	void CheckHighScore();
+	void SaveHighScore();
+	void LoadHighScore();
+
+	int GetScore();
+	void SetScore(int _score);
 };
