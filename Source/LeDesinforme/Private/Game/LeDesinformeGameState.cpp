@@ -17,9 +17,10 @@ ALeDesinformeGameState::ALeDesinformeGameState()
 void ALeDesinformeGameState::BeginPlay()
 {
 	Super::BeginPlay();
-
-	ALeDesinformeGameMode* gameMode = Cast<ALeDesinformeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	
+	LoadHighScore();
+	
+	ALeDesinformeGameMode* gameMode = Cast<ALeDesinformeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	m_timer = gameMode->GetDefaultTimerValue();
 }
 
@@ -37,6 +38,9 @@ void ALeDesinformeGameState::Tick(float _deltaSeconds)
 		// Print score
 		FString messageScore = FString::Printf(TEXT("SCORE : %d"), m_score);
 		GEngine->AddOnScreenDebugMessage(1, 0.0f, FColor::Green, messageScore);
+		// Print high score
+		FString messageHighScore = FString::Printf(TEXT("HIGH SCORE : %d"), m_highScore);
+		GEngine->AddOnScreenDebugMessage(2, 0.0f, FColor::Green, messageHighScore);
 	}
 
 	if (m_timer <= 0.f)
@@ -72,7 +76,14 @@ void ALeDesinformeGameState::SaveHighScore()
 
 void ALeDesinformeGameState::LoadHighScore()
 {
-	
+	FString loadedHighScore;
+	if (FPlatformFileManager::Get().GetPlatformFile().FileExists(*m_saveFilePath))
+	{
+		if (FFileHelper::LoadFileToString(loadedHighScore, *m_saveFilePath))
+		{
+			m_highScore = FCString::Atoi(*loadedHighScore);
+		}
+	}
 }
 
 int ALeDesinformeGameState::GetScore()
