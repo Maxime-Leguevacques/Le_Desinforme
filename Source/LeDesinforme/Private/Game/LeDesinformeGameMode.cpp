@@ -34,12 +34,12 @@ void ALeDesinformeGameMode::Win()
 	UGameplayStatics::OpenLevel(this, "LevelOffice");
 }
 
-void ALeDesinformeGameMode::GameOver()
+void ALeDesinformeGameMode::GameOver()		// TODO
 {
 	
 }
  
-void ALeDesinformeGameMode::EndGame()
+void ALeDesinformeGameMode::EndGame()		// TODO
 {
 	
 }
