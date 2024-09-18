@@ -10,7 +10,7 @@ class LEDESINFORME_API UHUD_PlayerInGame : public UUserWidget
 {
 	GENERATED_BODY()
 
-	
-protected:
-	virtual void NativeConstruct() override;
+public:
+	void UpdateTimer(float _timer);
+	void UpdateScore(int _score);
 };

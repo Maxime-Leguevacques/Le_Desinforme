@@ -33,4 +33,5 @@ public:
 
 	int GetScore();
 	void SetScore(int _score);
+	float GetTimer();
 };

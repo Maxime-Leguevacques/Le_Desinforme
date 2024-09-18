@@ -95,3 +95,8 @@ void ALeDesinformeGameState::SetScore(int _score)
 {
 	m_score = _score;
 }
+
+float ALeDesinformeGameState::GetTimer()
+{
+	return m_timer;
+}
