@@ -32,27 +32,12 @@ void ALeDesinformeGameState::Tick(float _deltaSeconds)
 	m_timer -= _deltaSeconds;
 
 	// Update the HUD
-	APlayerController* playerController = GetWorld()->GetFirstPlayerController();
-	if (playerController)
+	if (APlayerController* playerController = GetWorld()->GetFirstPlayerController())
 	{
-		APlayerHUD* hud = Cast<APlayerHUD>(playerController->GetHUD());
-		if (hud)
+		if (APlayerHUD* hud = Cast<APlayerHUD>(playerController->GetHUD()))
 		{
 			hud->UpdateTimer();
 		}
-	}
-	
-	if (GEngine)
-	{
-		// Print timer
-		FString messageTimer = FString::Printf(TEXT("TIMER : %f"), m_timer);
-		GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Red, messageTimer);
-		// Print score
-		FString messageScore = FString::Printf(TEXT("SCORE : %d"), m_score);
-		GEngine->AddOnScreenDebugMessage(1, 0.0f, FColor::Green, messageScore);
-		// Print high score
-		FString messageHighScore = FString::Printf(TEXT("HIGH SCORE : %d"), m_highScore);
-		GEngine->AddOnScreenDebugMessage(2, 0.0f, FColor::Green, messageHighScore);
 	}
 
 	if (m_timer <= 0.f)

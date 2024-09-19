@@ -33,8 +33,7 @@ void APlayerHUD::UpdateTimer()
 	
 	if (m_currentWidget)
 	{
-		UWidget_HUD* widget = Cast<UWidget_HUD>(m_currentWidget);
-		if (widget)
+		if (UWidget_HUD* widget = Cast<UWidget_HUD>(m_currentWidget))
 		{
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 			widget->UpdateTimer(gameState->GetTimer());
@@ -46,8 +45,7 @@ void APlayerHUD::UpdateScore()
 {
 	if (m_currentWidget)
 	{
-		UWidget_HUD* widget = Cast<UWidget_HUD>(m_currentWidget);
-		if (widget)
+		if (UWidget_HUD* widget = Cast<UWidget_HUD>(m_currentWidget))
 		{
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 			widget->UpdateScore(gameState->GetScore());
