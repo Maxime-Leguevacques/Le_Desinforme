@@ -2,6 +2,7 @@
 
 #include "Game/LeDesinformeGameInstance.h"
 #include "Game/LeDesinformeGameMode.h"
+#include "Game/PlayerHUD.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -29,6 +30,17 @@ void ALeDesinformeGameState::Tick(float _deltaSeconds)
 	Super::Tick(_deltaSeconds);
 
 	m_timer -= _deltaSeconds;
+
+	// Update the HUD
+	APlayerController* playerController = GetWorld()->GetFirstPlayerController();
+	if (playerController)
+	{
+		APlayerHUD* hud = Cast<APlayerHUD>(playerController->GetHUD());
+		if (hud)
+		{
+			hud->UpdateTimer();
+		}
+	}
 	
 	if (GEngine)
 	{

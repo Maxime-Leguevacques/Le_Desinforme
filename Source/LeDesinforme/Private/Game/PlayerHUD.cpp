@@ -1,5 +1,6 @@
 #include "Game/PlayerHUD.h"
 
+#include "Game/LeDesinformeGameState.h"
 #include "UI/HUD_PlayerInGame.h"
 
 
@@ -15,29 +16,41 @@ void APlayerHUD::BeginPlay()
 		{
 			m_currentWidget->AddToViewport();
 		}
-	}
-}
 
-void APlayerHUD::UpdateTimer(float _timer)
-{
-	if (m_currentWidget)
-	{
-		UHUD_PlayerInGame* widget = Cast<UHUD_PlayerInGame>(m_currentWidget);
-		if (widget)
+		// Update HUD in the BeginPlay since when a new round starts, map is reloaded and HUD is reloaded as well, setting score to 0
+		if (APlayerController* playerController = GetWorld()->GetFirstPlayerController())
 		{
-			widget->UpdateTimer(_timer);
+			if (APlayerHUD* hud = Cast<APlayerHUD>(playerController->GetHUD()))
+			{
+				hud->UpdateScore();
+			}
 		}
 	}
 }
 
-void APlayerHUD::UpdateScore(float _score)
+void APlayerHUD::UpdateTimer()
+{
+	
+	if (m_currentWidget)
+	{
+		UHUD_PlayerInGame* widget = Cast<UHUD_PlayerInGame>(m_currentWidget);
+		if (widget)
+		{
+			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+			widget->UpdateTimer(gameState->GetTimer());
+		}
+	}
+}
+
+void APlayerHUD::UpdateScore()
 {
 	if (m_currentWidget)
 	{
 		UHUD_PlayerInGame* widget = Cast<UHUD_PlayerInGame>(m_currentWidget);
 		if (widget)
 		{
-			widget->UpdateScore(_score);
+			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+			widget->UpdateScore(gameState->GetScore());
 		}
 	}
 }

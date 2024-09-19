@@ -20,6 +20,6 @@ private:
 
 public:
 	virtual void BeginPlay() override;
-	void UpdateTimer(float _timer);
-	void UpdateScore(float _score);
+	void UpdateTimer();
+	void UpdateScore();
 };
