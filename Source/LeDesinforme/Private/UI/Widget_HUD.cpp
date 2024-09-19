@@ -9,9 +9,12 @@ void UWidget_HUD::UpdateTimer(float _timer)
 	if (UTextBlock* textTimer = Cast<UTextBlock>(GetWidgetFromName(TEXT("Text_Timer_Whole"))))
 	{
 		int wholeTimerPart = FMath::FloorToInt(_timer);
-		FString stringTimer = FString::FromInt(wholeTimerPart);
-		FText textTimerValue = FText::FromString(stringTimer);
-		textTimer->SetText(textTimerValue);
+		if (wholeTimerPart >= 0)
+		{
+			FString stringTimer = FString::FromInt(wholeTimerPart);
+			FText textTimerValue = FText::FromString(stringTimer);
+			textTimer->SetText(textTimerValue);
+		}
 	}
 	// Decimal part of timer
 	if (UTextBlock* textTimer = Cast<UTextBlock>(GetWidgetFromName(TEXT("Text_Timer_Decimal"))))
