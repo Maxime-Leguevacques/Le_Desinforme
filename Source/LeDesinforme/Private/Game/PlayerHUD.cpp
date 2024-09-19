@@ -1,7 +1,7 @@
 #include "Game/PlayerHUD.h"
 
 #include "Game/LeDesinformeGameState.h"
-#include "UI/HUD_PlayerInGame.h"
+#include "UI/Widget_HUD.h"
 
 
 void APlayerHUD::BeginPlay()
@@ -33,7 +33,7 @@ void APlayerHUD::UpdateTimer()
 	
 	if (m_currentWidget)
 	{
-		UHUD_PlayerInGame* widget = Cast<UHUD_PlayerInGame>(m_currentWidget);
+		UWidget_HUD* widget = Cast<UWidget_HUD>(m_currentWidget);
 		if (widget)
 		{
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
@@ -46,7 +46,7 @@ void APlayerHUD::UpdateScore()
 {
 	if (m_currentWidget)
 	{
-		UHUD_PlayerInGame* widget = Cast<UHUD_PlayerInGame>(m_currentWidget);
+		UWidget_HUD* widget = Cast<UWidget_HUD>(m_currentWidget);
 		if (widget)
 		{
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());

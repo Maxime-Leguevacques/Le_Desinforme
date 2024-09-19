@@ -1,9 +1,9 @@
-#include "UI/HUD_PlayerInGame.h"
+#include "UI/Widget_HUD.h"
 
 #include "Components/TextBlock.h"
 
 
-void UHUD_PlayerInGame::UpdateTimer(float _timer)
+void UWidget_HUD::UpdateTimer(float _timer)
 {
 	// Whole part of timer
 	if (UTextBlock* textTimer = Cast<UTextBlock>(GetWidgetFromName(TEXT("Text_Timer_Whole"))))
@@ -24,7 +24,7 @@ void UHUD_PlayerInGame::UpdateTimer(float _timer)
 	}
 }
 
-void UHUD_PlayerInGame::UpdateScore(int _score)
+void UWidget_HUD::UpdateScore(int _score)
 {
 	if (UTextBlock* textScore = Cast<UTextBlock>(GetWidgetFromName(TEXT("Text_Score"))))
 	{

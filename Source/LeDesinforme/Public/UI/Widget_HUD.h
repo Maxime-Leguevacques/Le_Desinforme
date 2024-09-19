@@ -2,11 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "HUD_PlayerInGame.generated.h"
+#include "Widget_HUD.generated.h"
 
 
 UCLASS()
-class LEDESINFORME_API UHUD_PlayerInGame : public UUserWidget
+class LEDESINFORME_API UWidget_HUD : public UUserWidget
 {
 	GENERATED_BODY()
 
