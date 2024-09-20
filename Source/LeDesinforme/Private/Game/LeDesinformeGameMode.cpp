@@ -25,6 +25,28 @@ float ALeDesinformeGameMode::GetDefaultTimerValue()
 	return m_defaultTimerValue; 
 }
 
+void ALeDesinformeGameMode::OnGameStateChange()
+{
+	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+	switch (gameState->GetCurrentGameState())
+	{
+	case EGameState::HomeMenu:
+		UGameplayStatics::OpenLevel(this, "LevelHomeMenu");
+		break;
+	case EGameState::Playing:
+		UGameplayStatics::OpenLevel(this, "LevelOffice");
+		break;
+	case EGameState::PauseMenu:
+		break;
+	case EGameState::WinMenu:
+		break;
+	case EGameState::GameOverMenu:
+		break;
+	case EGameState::EndGameMenu:
+		break;
+	}
+}
+
 void ALeDesinformeGameMode::Win()
 {
 	// Increment Score and do all high score updates and checks.

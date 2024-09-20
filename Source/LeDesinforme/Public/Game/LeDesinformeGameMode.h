@@ -22,6 +22,8 @@ protected:
 	
 public:
 	float GetDefaultTimerValue();
+	// Handle GameState change
+	void OnGameStateChange();
 	// When Player reports a bad Employee
 	void Win();
 	// When Player reports a good Employee
