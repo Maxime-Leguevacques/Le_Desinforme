@@ -93,19 +93,7 @@ float ALeDesinformeGameState::GetTimer()
 	return m_timer;
 }
 
-EGameState ALeDesinformeGameState::GetCurrentGameState()
-{
-	return m_currentGameState;
-}
-
 void ALeDesinformeGameState::SetScore(int _score)
 {
 	m_score = _score;
-}
-
-void ALeDesinformeGameState::SetGameState(EGameState _gameState)
-{
-	m_currentGameState = _gameState;
-	ALeDesinformeGameMode* gameMode = Cast<ALeDesinformeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	gameMode->OnGameStateChange();
 }

@@ -2,6 +2,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Game/PlayerHUD.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -16,6 +17,10 @@ void APlayerCharacter::BeginPlay()
 	APlayerController* playerController = Cast<APlayerController>(GetController());
 	UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerController->GetLocalPlayer());
 	subsystem->AddMappingContext(m_inputMappingContext, 0);
+
+	APlayerController* controller = Cast<APlayerController>(GetController());
+	APlayerHUD* hud = Cast<APlayerHUD>(controller->GetHUD());
+	hud->ShowHud();
 }
 
 #pragma region Input Action functions

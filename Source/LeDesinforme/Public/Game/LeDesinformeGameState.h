@@ -5,18 +5,6 @@
 #include "LeDesinformeGameState.generated.h"
 
 
-UENUM(BlueprintType)
-enum class EGameState : uint8
-{
-	HomeMenu	UMETA(DisplayName = "HomeMenu"),
-	Playing		UMETA(DisplayName = "Playing"),
-	PauseMenu	UMETA(DisplayName = "PauseMenu"),
-	WinMenu		UMETA(DisplayName = "WinMenu"),
-	GameOverMenu UMETA(DisplayName = "GameOverMenu"),
-	EndGameMenu	UMETA(DisplayName = "EndGameMenu")
-};
-
-
 UCLASS()
 class LEDESINFORME_API ALeDesinformeGameState : public AGameStateBase
 {
@@ -29,9 +17,6 @@ private:
 
 	// For saving the highscore
 	FString m_saveFilePath;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState", meta = (AllowPrivateAccess = "true"))
-	EGameState m_currentGameState;
 
 public:
 	ALeDesinformeGameState();
@@ -48,8 +33,6 @@ public:
 
 	int GetScore();
 	float GetTimer();
-	EGameState GetCurrentGameState();
 	
 	void SetScore(int _score);
-	void SetGameState(EGameState _gameState);
 };
