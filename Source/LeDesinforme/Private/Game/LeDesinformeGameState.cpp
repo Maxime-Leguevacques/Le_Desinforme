@@ -39,12 +39,37 @@ void ALeDesinformeGameState::Tick(float _deltaSeconds)
 			hud->UpdateTimer();
 		}
 	}
-
-	if (m_timer <= 0.f)
+	
+	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
+	if (gameInstance->GetGameState() == EGameState::Playing)
 	{
-		ALeDesinformeGameMode* gameMode = Cast<ALeDesinformeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-		gameMode->Win();
+		if (m_timer <= 0.f)
+		{
+			ALeDesinformeGameMode* gameMode = Cast<ALeDesinformeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+			gameMode->Win();
+		}
 	}
+
+#pragma region GameStateDebug
+	FString gameStateText;
+	switch (gameInstance->GetGameState()) {
+	case EGameState::HomeMenu:
+		gameStateText = "HomeMenu";
+		break;
+	case EGameState::Playing:
+		gameStateText = "Playing";
+		break;
+	case EGameState::PauseMenu:
+		break;
+	case EGameState::WinMenu:
+		break;
+	case EGameState::GameOverMenu:
+		break;
+	case EGameState::EndGameMenu:
+		break;
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, gameStateText);
+#pragma endregion GameStateDebug
 }
 
 void ALeDesinformeGameState::IncrementScore()
