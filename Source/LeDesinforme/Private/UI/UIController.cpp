@@ -22,7 +22,6 @@ void AUIController::SetupHomeMenuWidget()
 			if (APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController()))
 			{
 				FInputModeUIOnly inputMode;
-				// inputMode.SetWidgetToFocus(m_homeMenuWidgetInstance->TakeWidget());
 				inputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 				playerController->SetShowMouseCursor(true);
 				playerController->SetInputMode(inputMode);

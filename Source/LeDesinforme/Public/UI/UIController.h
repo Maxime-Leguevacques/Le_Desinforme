@@ -11,6 +11,7 @@ class LEDESINFORME_API AUIController : public AActor
 	GENERATED_BODY()
 
 protected:
+	// Selected widget class of homeMenu to create
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> m_homeMenuWidgetClass;
 	// Instance of homeMenuWidgetClass

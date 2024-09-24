@@ -16,7 +16,6 @@ void UWidget_HomeMenu::NativeConstruct()
 
 void UWidget_HomeMenu::OnStartButtonClicked()
 {
-	UE_LOG(LogTemp, Warning, TEXT("I WAS CLICKED"));
 	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
 	gameInstance->SetGameState(EGameState::Playing);
 }
