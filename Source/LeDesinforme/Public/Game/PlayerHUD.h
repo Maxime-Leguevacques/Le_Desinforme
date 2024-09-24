@@ -13,9 +13,9 @@ class LEDESINFORME_API APlayerHUD : public AHUD
 protected:
 	// Selected widget class to create
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UUserWidget> m_selectedWidgetHud;
+	TSubclassOf<UUserWidget> m_widgetHudClass;
 	// Instance of the created widget
-	UUserWidget* m_widgetHud = nullptr;
+	UUserWidget* m_widgetHudInstance = nullptr;
 
 public:
 	virtual void BeginPlay() override;
