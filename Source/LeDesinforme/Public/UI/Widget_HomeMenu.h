@@ -13,10 +13,14 @@ class LEDESINFORME_API UWidget_HomeMenu : public UUserWidget
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* m_startButton = nullptr;
+	UPROPERTY(meta = (BindWidget))
+	class UButton* m_quitButton = nullptr;
 
 protected:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
 	void OnStartButtonClicked();
+	UFUNCTION()
+	void OnQuitButtonClicked();
 };
