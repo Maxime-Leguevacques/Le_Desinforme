@@ -8,8 +8,9 @@ AUIController::AUIController()
 {
 }
 
-void AUIController::SetupHomeMenuWidget()
+void AUIController::SetupHomeMenu()
 {
+	// Setup home menu widget
 	if (m_homeMenuWidgetClass)
 	{
 		m_homeMenuWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), m_homeMenuWidgetClass);
@@ -28,9 +29,18 @@ void AUIController::SetupHomeMenuWidget()
 			}
 		}
 	}
+
+	// Setup external camera
+	if (APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController()))
+	{
+		if (m_cameraHomeMenu)
+		{
+			playerController->SetViewTarget(m_cameraHomeMenu);
+		}
+	}
 }
 
-void AUIController::SetupPlayingWidget()
+void AUIController::SetupPlaying()
 {
 	// Set InputMode
 	if (APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController()))
@@ -48,10 +58,10 @@ void AUIController::BeginPlay()
 	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
 	switch (gameInstance->GetGameState()) {
 	case EGameState::HomeMenu:
-		SetupHomeMenuWidget();
+		SetupHomeMenu();
 		break;
 	case EGameState::Playing:
-		SetupPlayingWidget();
+		SetupPlaying();
 		break;
 	case EGameState::PauseMenu:
 		break;
