@@ -49,27 +49,6 @@ void ALeDesinformeGameState::Tick(float _deltaSeconds)
 			gameMode->Win();
 		}
 	}
-
-#pragma region GameStateDebug
-	FString gameStateText;
-	switch (gameInstance->GetGameState()) {
-	case EGameState::HomeMenu:
-		gameStateText = "HomeMenu";
-		break;
-	case EGameState::Playing:
-		gameStateText = "Playing";
-		break;
-	case EGameState::PauseMenu:
-		break;
-	case EGameState::WinMenu:
-		break;
-	case EGameState::GameOverMenu:
-		break;
-	case EGameState::EndGameMenu:
-		break;
-	}
-	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, gameStateText);
-#pragma endregion GameStateDebug
 }
 
 void ALeDesinformeGameState::IncrementScore()
