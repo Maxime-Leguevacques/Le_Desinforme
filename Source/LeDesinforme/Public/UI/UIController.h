@@ -15,11 +15,15 @@ protected:
 	// Selected widget class of homeMenu to create
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HomeMenuLevel")
 	TSubclassOf<UUserWidget> m_homeMenuWidgetClass;
-	// Instance of homeMenuWidgetClass
 	UUserWidget* m_homeMenuWidgetInstance = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HomeMenuLevel")
 	ACameraActor* m_cameraHomeMenu = nullptr;
-		
+	
+	// Selected widget class of the cursor to create when zooming on a valid object
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
+	TSubclassOf<UUserWidget> m_cursorWidgetClass;
+	UUserWidget* m_cursorWidgetInstance = nullptr;
+	
 public:	
 	AUIController();
 
@@ -29,4 +33,8 @@ private:
 	
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	void AddCursorOnScreen();
+	void RemoveCursorFromScreen();
 };

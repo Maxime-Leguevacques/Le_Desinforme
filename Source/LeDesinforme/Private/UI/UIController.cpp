@@ -14,7 +14,6 @@ void AUIController::SetupHomeMenu()
 	if (m_homeMenuWidgetClass)
 	{
 		m_homeMenuWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), m_homeMenuWidgetClass);
-		
 		if (m_homeMenuWidgetInstance)
 		{
 			m_homeMenuWidgetInstance->AddToViewport();
@@ -56,6 +55,7 @@ void AUIController::BeginPlay()
 	Super::BeginPlay();
 
 	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
+	gameInstance->SetUiController(this);
 	switch (gameInstance->GetGameState()) {
 	case EGameState::HomeMenu:
 		SetupHomeMenu();
@@ -71,5 +71,26 @@ void AUIController::BeginPlay()
 		break;
 	case EGameState::EndGameMenu:
 		break;
+	}
+}
+
+void AUIController::AddCursorOnScreen()
+{
+	if (m_cursorWidgetClass && !m_cursorWidgetInstance)
+	{
+		m_cursorWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), m_cursorWidgetClass);
+		if (m_cursorWidgetInstance)
+		{
+			m_cursorWidgetInstance->AddToViewport();
+		}
+	}
+}
+
+void AUIController::RemoveCursorFromScreen()
+{
+	if (m_cursorWidgetInstance && m_cursorWidgetInstance->IsInViewport())
+	{
+		m_cursorWidgetInstance->RemoveFromParent();
+		m_cursorWidgetInstance = nullptr;
 	}
 }

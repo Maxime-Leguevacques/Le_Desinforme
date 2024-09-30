@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "UI/UIController.h"
 #include "LeDesinformeGameInstance.generated.h"
 
 
@@ -26,6 +27,7 @@ private:
 	int m_score = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState", meta = (AllowPrivateAccess = "true"))
 	EGameState m_currentGameState;
+	AUIController* m_uiController = nullptr;
 	
 public:
 	ULeDesinformeGameInstance();
@@ -36,7 +38,9 @@ public:
 
 	int GetScore() const;
 	EGameState GetGameState() const;
+	AUIController* GetUiController() const;
 	
 	void SetScore(const int _score);
 	void SetGameState(EGameState _gameState);
+	void SetUiController(AUIController* _uiController);
 };

@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Computer/Computer.h"
+#include "Game/LeDesinformeGameInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
@@ -124,6 +125,8 @@ void APlayerCharacter::Look(const FInputActionValue& _value)
 
 void APlayerCharacter::ZoomStart(const FInputActionValue& _value)
 {
+
+	// TODO : Check if m_isZooming is usefull
 	m_cameraState = Focused;
 	m_isZooming = true;
 	m_targetFov = m_zoomFov;
@@ -136,6 +139,10 @@ void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
 	m_isZooming = false;
 	m_targetFov = m_defaultFov;
 	m_fovInterpolateSpeed = FMath::Abs(m_currentFov - m_targetFov) * m_zoomSpeed;
+	
+	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
+	gameInstance->GetUiController()->RemoveCursorFromScreen();
+	
 }  
 #pragma endregion Input Action functions
 
@@ -169,8 +176,19 @@ void APlayerCharacter::DetectObjects()
 		AComputer* detectedComputer = Cast<AComputer>(hitResult.GetActor());
 		if(IsValid(detectedComputer))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.001f, FColor::Orange, TEXT("Computer detected"));
+			ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
+			gameInstance->GetUiController()->AddCursorOnScreen();
 		}
+		else
+		{
+			ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
+			gameInstance->GetUiController()->RemoveCursorFromScreen();
+		}
+	}
+	else
+	{
+		ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
+		gameInstance->GetUiController()->RemoveCursorFromScreen();
 	}
 }
 

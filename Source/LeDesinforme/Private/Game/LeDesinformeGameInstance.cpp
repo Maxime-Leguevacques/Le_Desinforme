@@ -44,6 +44,11 @@ EGameState ULeDesinformeGameInstance::GetGameState() const
 	return m_currentGameState;
 }
 
+AUIController* ULeDesinformeGameInstance::GetUiController() const
+{
+	return m_uiController;
+}
+
 void ULeDesinformeGameInstance::SetScore(const int _score)
 {
 	m_score = _score;
@@ -53,4 +58,9 @@ void ULeDesinformeGameInstance::SetGameState(EGameState _gameState)
 {
 	m_currentGameState = _gameState;
 	OnGameStateChange();
+}
+
+void ULeDesinformeGameInstance::SetUiController(AUIController* _uiController)
+{
+	m_uiController = _uiController;
 }

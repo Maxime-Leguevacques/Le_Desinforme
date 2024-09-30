@@ -58,7 +58,6 @@ protected:
 	UInputAction* m_zoom;
 #pragma endregion Input
 
-
 protected:
 	virtual void BeginPlay() override;
 
