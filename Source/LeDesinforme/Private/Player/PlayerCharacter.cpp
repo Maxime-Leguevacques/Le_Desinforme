@@ -2,9 +2,9 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -28,11 +28,6 @@ void APlayerCharacter::BeginPlay()
 		SetupFov();
 		m_camera->SetFieldOfView(m_currentFov);
 	}
-	
-	if (m_springArm)
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Purple, TEXT("springArm is here"));
-	if (m_camera)
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("camera is here"));
 }
 
 void APlayerCharacter::Tick(const float _deltaTime)
@@ -43,8 +38,6 @@ void APlayerCharacter::Tick(const float _deltaTime)
 	{
 		UpdateFov(_deltaTime);
 	}
-	
-	GEngine->AddOnScreenDebugMessage(-1, 0.001f, FColor::Green, FString::Printf(TEXT("zooming : %d"),  m_isZooming));
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* _playerInputComponent)
@@ -74,7 +67,7 @@ void APlayerCharacter::SetupCamera()
 {
 	m_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	m_camera->SetupAttachment(m_springArm, USpringArmComponent::SocketName);
-	m_camera->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
+	m_camera->SetRelativeLocation(FVector(-100.0f, 0.0f, 50.0f));
 	// Lock the camera to the character
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -90,8 +83,8 @@ void APlayerCharacter::SetupCamera()
 void APlayerCharacter::SetupFov()
 {
 	m_currentFov = m_defaultFov;
+	m_targetFov = m_defaultFov;
 }
-
 
 #pragma region Input Action functions
 void APlayerCharacter::Move(const FInputActionValue& _value)
@@ -123,7 +116,6 @@ void APlayerCharacter::ZoomStart(const FInputActionValue& _value)
 	m_isZooming = true;
 	m_targetFov = m_zoomFov;
 	m_fovInterpolateSpeed = FMath::Abs(m_currentFov - m_targetFov) * m_zoomSpeed;
-	UE_LOG(LogTemp, Warning, TEXT("Camera here"));
 }
 
 void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
@@ -137,5 +129,6 @@ void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
 void APlayerCharacter::UpdateFov(const float _deltaTime)
 {
 	m_currentFov = FMath::FInterpTo(m_currentFov, m_targetFov, _deltaTime, m_fovInterpolateSpeed);
+	m_camera->SetFieldOfView(m_currentFov);
 }
 

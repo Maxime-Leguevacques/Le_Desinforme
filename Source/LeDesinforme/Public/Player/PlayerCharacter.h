@@ -11,7 +11,7 @@ class UInputAction;
 
 
 UENUM(BlueprintType)
-enum class ECameraState : uint8
+enum ECameraState
 {
 	Default		UMETA(DisplayName = "Default"),
 	Focused		UMETA(DisplayName = "FocusedOnScreen")
@@ -30,7 +30,7 @@ protected:
 	bool m_isZooming = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom", meta = (AllowPrivateAccess = "true"))
 	float m_defaultFov = 90.0f;
-	float m_currentFov = 90.0f;
+	float m_currentFov;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom", meta = (AllowPrivateAccess = "true"))
 	float m_zoomFov = 60.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom", meta = (AllowPrivateAccess = "true"))
@@ -39,11 +39,11 @@ protected:
 	float m_fovInterpolateSpeed = 0.0f;
 #pragma endregion Zoom Variables
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* m_springArm = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpringArm")
+	class USpringArmComponent* m_springArm;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	class UCameraComponent* m_camera = nullptr;
-	ECameraState m_cameraState;
+	class UCameraComponent* m_camera;
+	TEnumAsByte<ECameraState> m_cameraState;
 	
 protected:
 #pragma region Input
