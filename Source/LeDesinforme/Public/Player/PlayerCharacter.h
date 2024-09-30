@@ -25,7 +25,7 @@ class LEDESINFORME_API APlayerCharacter : public ACharacter
 public:
 	APlayerCharacter();
 
-private:
+protected:
 #pragma region Zoom Variables
 	bool m_isZooming = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom", meta = (AllowPrivateAccess = "true"))
@@ -41,7 +41,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* m_springArm = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	class UCameraComponent* m_camera = nullptr;
 	ECameraState m_cameraState;
 	
@@ -60,13 +60,13 @@ protected:
 
 protected:
 	virtual void BeginPlay() override;
-	void PostInitializeComponents() override;
 
 public:	
 	virtual void Tick(float _deltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* _playerInputComponent) override;
 	
 private:
+	void SetupSpringArm();
 	void SetupCamera();
 	void SetupFov();
 	

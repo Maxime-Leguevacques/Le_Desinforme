@@ -11,26 +11,28 @@ APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	SetupSpringArm();
 	SetupCamera();
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	APlayerController* playerController = Cast<APlayerController>(GetController());
 	UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerController->GetLocalPlayer());
 	subsystem->AddMappingContext(m_inputMappingContext, 0);
 
-	SetupFov();
 	if (m_camera)
-		UE_LOG(LogTemp, Warning, TEXT("I AM HERE"));
-	m_camera->SetFieldOfView(m_currentFov);
-}
-
-void APlayerCharacter::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
+	{
+		SetupFov();
+		m_camera->SetFieldOfView(m_currentFov);
+	}
+	
+	if (m_springArm)
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Purple, TEXT("springArm is here"));
+	if (m_camera)
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("camera is here"));
 }
 
 void APlayerCharacter::Tick(const float _deltaTime)
@@ -41,8 +43,8 @@ void APlayerCharacter::Tick(const float _deltaTime)
 	{
 		UpdateFov(_deltaTime);
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("zooming : %d"),  m_isZooming));
+	
+	GEngine->AddOnScreenDebugMessage(-1, 0.001f, FColor::Green, FString::Printf(TEXT("zooming : %d"),  m_isZooming));
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* _playerInputComponent)
@@ -59,14 +61,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* _playerInputCo
 	}
 }
 
-void APlayerCharacter::SetupCamera()
+void APlayerCharacter::SetupSpringArm()
 {
-	// Setup Spring Arm
 	m_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	m_springArm->SetupAttachment(RootComponent);
 	m_springArm->TargetArmLength = 0.0f;
 	m_springArm->SetRelativeRotation(FRotator(-45.0f, 0.0f, 0.0f));
-	// Setup Camera
+	m_springArm->bUsePawnControlRotation = true;
+}
+
+void APlayerCharacter::SetupCamera()
+{
 	m_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	m_camera->SetupAttachment(m_springArm, USpringArmComponent::SocketName);
 	m_camera->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
@@ -75,7 +80,6 @@ void APlayerCharacter::SetupCamera()
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
 	// Only the spring arm rotates
-	m_springArm->bUsePawnControlRotation = true;
 	m_camera->bUsePawnControlRotation = false;
 	// Set the character rotation to the direction of the movement
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -133,9 +137,5 @@ void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
 void APlayerCharacter::UpdateFov(const float _deltaTime)
 {
 	m_currentFov = FMath::FInterpTo(m_currentFov, m_targetFov, _deltaTime, m_fovInterpolateSpeed);
-	m_camera->SetFieldOfView(m_currentFov);
-	if (m_camera)
-		UE_LOG(LogTemp, Warning, TEXT("Current FOV: %f, Target FOV: %f"), m_currentFov, m_targetFov);
-
 }
 
