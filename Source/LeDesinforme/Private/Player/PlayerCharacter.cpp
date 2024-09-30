@@ -4,6 +4,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Computer/Computer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
@@ -13,6 +14,7 @@ APlayerCharacter::APlayerCharacter()
 
 	SetupSpringArm();
 	SetupCamera();
+	SetupFov();
 }
 
 void APlayerCharacter::BeginPlay()
@@ -25,7 +27,6 @@ void APlayerCharacter::BeginPlay()
 
 	if (m_camera)
 	{
-		SetupFov();
 		m_camera->SetFieldOfView(m_currentFov);
 	}
 }
@@ -36,6 +37,16 @@ void APlayerCharacter::Tick(const float _deltaTime)
 
 	if (m_camera)
 	{
+		switch (m_cameraState) {
+		case Default:
+			break;
+		case Focused:
+			DetectObjects();
+			break;
+		default:
+			break;
+		}
+		
 		UpdateFov(_deltaTime);
 	}
 }
@@ -67,7 +78,7 @@ void APlayerCharacter::SetupCamera()
 {
 	m_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	m_camera->SetupAttachment(m_springArm, USpringArmComponent::SocketName);
-	m_camera->SetRelativeLocation(FVector(-100.0f, 0.0f, 50.0f));
+	m_camera->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
 	// Lock the camera to the character
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -77,7 +88,7 @@ void APlayerCharacter::SetupCamera()
 	// Set the character rotation to the direction of the movement
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 300.0f, 0.0f);
-	m_cameraState = ECameraState::Default;
+	m_cameraState = Default;
 }
 
 void APlayerCharacter::SetupFov()
@@ -113,6 +124,7 @@ void APlayerCharacter::Look(const FInputActionValue& _value)
 
 void APlayerCharacter::ZoomStart(const FInputActionValue& _value)
 {
+	m_cameraState = Focused;
 	m_isZooming = true;
 	m_targetFov = m_zoomFov;
 	m_fovInterpolateSpeed = FMath::Abs(m_currentFov - m_targetFov) * m_zoomSpeed;
@@ -120,6 +132,7 @@ void APlayerCharacter::ZoomStart(const FInputActionValue& _value)
 
 void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
 {
+	m_cameraState = Default;
 	m_isZooming = false;
 	m_targetFov = m_defaultFov;
 	m_fovInterpolateSpeed = FMath::Abs(m_currentFov - m_targetFov) * m_zoomSpeed;
@@ -130,5 +143,34 @@ void APlayerCharacter::UpdateFov(const float _deltaTime)
 {
 	m_currentFov = FMath::FInterpTo(m_currentFov, m_targetFov, _deltaTime, m_fovInterpolateSpeed);
 	m_camera->SetFieldOfView(m_currentFov);
+}
+
+void APlayerCharacter::DetectObjects()
+{
+	APlayerController* playerController = Cast<APlayerController>(GetController());
+	if (!playerController)
+	{
+		return;
+	}
+
+	// Get camera location and rotation
+	FVector cameraLocation;
+	FRotator cameraRotation;
+	playerController->GetPlayerViewPoint(cameraLocation, cameraRotation);
+	// Create a start and end point for the raycast where object detection will occur
+	FVector raycastEnd = cameraLocation + (cameraRotation.Vector() * 500.0f);
+	// Setup raycast
+	FCollisionQueryParams collisionParams;
+	collisionParams.AddIgnoredActor(this);
+	// If object is detected
+	FHitResult hitResult;
+	if (GetWorld()->LineTraceSingleByChannel(hitResult, cameraLocation, raycastEnd, ECC_Visibility, collisionParams))		// cameraLocation is used as the raycast start point
+	{
+		AComputer* detectedComputer = Cast<AComputer>(hitResult.GetActor());
+		if(IsValid(detectedComputer))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.001f, FColor::Orange, TEXT("Computer detected"));
+		}
+	}
 }
 

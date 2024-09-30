@@ -13,6 +13,7 @@ class UInputAction;
 UENUM(BlueprintType)
 enum ECameraState
 {
+	// TODO : Check if Zooming can be a cameraState
 	Default		UMETA(DisplayName = "Default"),
 	Focused		UMETA(DisplayName = "FocusedOnScreen")
 };
@@ -78,4 +79,6 @@ private:
 #pragma endregion Input Action functions
 
 	void UpdateFov(float _deltaTime);
+	// When zooming, detect objects in view
+	void DetectObjects();
 };
