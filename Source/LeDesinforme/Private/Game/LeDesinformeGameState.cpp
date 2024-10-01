@@ -97,7 +97,17 @@ float ALeDesinformeGameState::GetTimer()
 	return m_timer;
 }
 
+AUIController* ALeDesinformeGameState::GetUiController()
+{
+	return m_uiController;
+}
+
 void ALeDesinformeGameState::SetScore(int _score)
 {
 	m_score = _score;
+}
+
+void ALeDesinformeGameState::SetUiController(AUIController* _uiController)
+{
+	m_uiController = _uiController;
 }

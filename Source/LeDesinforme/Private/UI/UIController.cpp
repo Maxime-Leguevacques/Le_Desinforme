@@ -2,7 +2,10 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Game/LeDesinformeGameInstance.h"
+#include "Game/LeDesinformeGameState.h"
 
+
+class ALeDesinformeGameState;
 
 AUIController::AUIController()
 {
@@ -55,7 +58,8 @@ void AUIController::BeginPlay()
 	Super::BeginPlay();
 
 	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
-	gameInstance->SetUiController(this);
+	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+	gameState->SetUiController(this);
 	switch (gameInstance->GetGameState()) {
 	case EGameState::HomeMenu:
 		SetupHomeMenu();

@@ -5,7 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Computer/Computer.h"
-#include "Game/LeDesinformeGameInstance.h"
+#include "Game/LeDesinformeGameState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
@@ -140,8 +140,8 @@ void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
 	m_targetFov = m_defaultFov;
 	m_fovInterpolateSpeed = FMath::Abs(m_currentFov - m_targetFov) * m_zoomSpeed;
 	
-	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
-	gameInstance->GetUiController()->RemoveCursorFromScreen();
+	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+	gameState->GetUiController()->RemoveCursorFromScreen();
 	
 }  
 #pragma endregion Input Action functions
@@ -176,19 +176,19 @@ void APlayerCharacter::DetectObjects()
 		AComputer* detectedComputer = Cast<AComputer>(hitResult.GetActor());
 		if(IsValid(detectedComputer))
 		{
-			ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
-			gameInstance->GetUiController()->AddCursorOnScreen();
+			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+			gameState->GetUiController()->AddCursorOnScreen();
 		}
 		else
 		{
-			ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
-			gameInstance->GetUiController()->RemoveCursorFromScreen();
+			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+			gameState->GetUiController()->RemoveCursorFromScreen();
 		}
 	}
 	else
 	{
-		ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
-		gameInstance->GetUiController()->RemoveCursorFromScreen();
+		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+		gameState->GetUiController()->RemoveCursorFromScreen();
 	}
 }
 

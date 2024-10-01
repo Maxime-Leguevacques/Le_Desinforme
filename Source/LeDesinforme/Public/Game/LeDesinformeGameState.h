@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
+#include "UI/UIController.h"
 #include "LeDesinformeGameState.generated.h"
 
 
@@ -18,6 +19,8 @@ private:
 	// For saving the highscore
 	FString m_saveFilePath;
 
+	AUIController* m_uiController = nullptr;
+
 public:
 	ALeDesinformeGameState();
 
@@ -33,6 +36,8 @@ public:
 
 	int GetScore();
 	float GetTimer();
+	AUIController* GetUiController();
 	
 	void SetScore(int _score);
+	void SetUiController(AUIController* _uiController);
 };
