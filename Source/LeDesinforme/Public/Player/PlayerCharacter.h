@@ -84,4 +84,6 @@ private:
 	void UpdateFov(float _deltaTime);
 	// When zooming, detect objects in view
 	void DetectObjects();
+	// Focus on a computer screen
+	void FocusOnComputer();
 };

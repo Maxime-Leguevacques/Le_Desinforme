@@ -9,6 +9,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 
+// The height of the employee's computer screen to set the player camera to when focused
+const float EMPLOYEE_COMPUTER_SCREEN_HEIGHT = 179.0f;
+
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -150,7 +154,7 @@ void APlayerCharacter::Interact(const FInputActionValue& _value)
 {
 	if (m_focusedComputer)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Cyan, TEXT("Interacted with computer"));
+		FocusOnComputer();
 	}
 }
 #pragma endregion Input Action functions
@@ -202,5 +206,20 @@ void APlayerCharacter::DetectObjects()
 		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 		gameState->GetUiController()->RemoveCursorFromScreen();
 	}
+}
+
+void APlayerCharacter::FocusOnComputer()
+{
+	// Create a camera facing the computer
+	FVector cameraLocation = GetActorLocation();
+	cameraLocation.Y = EMPLOYEE_COMPUTER_SCREEN_HEIGHT;
+	// Camera looking at the computer's screen
+	if (ACameraActor* newCamera = GetWorld()->SpawnActor<ACameraActor>(ACameraActor::StaticClass(), cameraLocation, FRotator::ZeroRotator))
+	{
+	// Switch player camera to the created camera
+		APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+		playerController->SetViewTarget(newCamera);
+	}
+	// Disable player movement and rotation
 }
 
