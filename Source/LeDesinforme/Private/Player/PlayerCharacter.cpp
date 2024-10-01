@@ -61,8 +61,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* _playerInputCo
 	{
 		enhancedInputComponent->BindAction(m_iaMove, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 		enhancedInputComponent->BindAction(m_iaLook, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
-		enhancedInputComponent->BindAction(m_zoom, ETriggerEvent::Started, this, &APlayerCharacter::ZoomStart);
-		enhancedInputComponent->BindAction(m_zoom, ETriggerEvent::Completed, this, &APlayerCharacter::ZoomEnd);
+		enhancedInputComponent->BindAction(m_iaZoom, ETriggerEvent::Started, this, &APlayerCharacter::ZoomStart);
+		enhancedInputComponent->BindAction(m_iaZoom, ETriggerEvent::Completed, this, &APlayerCharacter::ZoomEnd);
+		enhancedInputComponent->BindAction(m_iaInteract, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
 	}
 }
 
@@ -143,7 +144,15 @@ void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
 	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 	gameState->GetUiController()->RemoveCursorFromScreen();
 	
-}  
+}
+
+void APlayerCharacter::Interact(const FInputActionValue& _value)
+{
+	if (m_focusedComputer)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Cyan, TEXT("Interacted with computer"));
+	}
+}
 #pragma endregion Input Action functions
 
 void APlayerCharacter::UpdateFov(const float _deltaTime)
@@ -176,17 +185,20 @@ void APlayerCharacter::DetectObjects()
 		AComputer* detectedComputer = Cast<AComputer>(hitResult.GetActor());
 		if(IsValid(detectedComputer))
 		{
+			m_focusedComputer = detectedComputer;
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 			gameState->GetUiController()->AddCursorOnScreen();
 		}
 		else
 		{
+			m_focusedComputer = nullptr;
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 			gameState->GetUiController()->RemoveCursorFromScreen();
 		}
 	}
 	else
 	{
+		m_focusedComputer = nullptr;
 		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 		gameState->GetUiController()->RemoveCursorFromScreen();
 	}

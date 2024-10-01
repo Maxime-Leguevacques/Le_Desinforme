@@ -39,14 +39,7 @@ protected:
 	float m_targetFov;
 	float m_fovInterpolateSpeed = 0.0f;
 #pragma endregion Zoom Variables
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpringArm")
-	class USpringArmComponent* m_springArm;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	class UCameraComponent* m_camera;
-	TEnumAsByte<ECameraState> m_cameraState;
-	
-protected:
+		
 #pragma region Input
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* m_inputMappingContext = nullptr;
@@ -55,8 +48,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* m_iaLook;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	UInputAction* m_zoom;
+	UInputAction* m_iaZoom;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* m_iaInteract;	
 #pragma endregion Input
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpringArm")
+	class USpringArmComponent* m_springArm;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	class UCameraComponent* m_camera;
+	TEnumAsByte<ECameraState> m_cameraState;
+
+	class AComputer* m_focusedComputer = nullptr;
 
 protected:
 	virtual void BeginPlay() override;
@@ -75,6 +78,7 @@ private:
 	void Look(const FInputActionValue& _value);
 	void ZoomStart(const FInputActionValue& _value);
 	void ZoomEnd(const FInputActionValue& _value);
+	void Interact(const FInputActionValue& _value);
 #pragma endregion Input Action functions
 
 	void UpdateFov(float _deltaTime);

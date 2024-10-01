@@ -6,7 +6,7 @@
 
 
 UENUM(BlueprintType)
-enum class EGameState : uint8
+enum EGameState
 {
 	HomeMenu	UMETA(DisplayName = "HomeMenu"),
 	Playing		UMETA(DisplayName = "Playing"),
@@ -25,7 +25,7 @@ class LEDESINFORME_API ULeDesinformeGameInstance : public UGameInstance
 private:
 	int m_score = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState", meta = (AllowPrivateAccess = "true"))
-	EGameState m_currentGameState;
+	TEnumAsByte<EGameState> m_currentGameState;
 	
 public:
 	ULeDesinformeGameInstance();
