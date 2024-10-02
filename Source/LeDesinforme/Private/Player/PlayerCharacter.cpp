@@ -211,12 +211,15 @@ void APlayerCharacter::DetectObjects()
 void APlayerCharacter::FocusOnComputer()
 {
 	// Create a camera facing the computer
-	FVector cameraLocation = GetActorLocation();
-	cameraLocation.Y = EMPLOYEE_COMPUTER_SCREEN_HEIGHT;
+	FRotator cameraRotation = m_focusedComputer-> GetActorForwardVector().Rotation() + FRotator(0.0f, -90.0f, 0.0f);
+	FVector offset = FVector(0.0f, 100.0f, 0.0f);
+	FVector rotatedOffset = m_focusedComputer-> GetActorForwardVector().Rotation().RotateVector(offset);
+	FVector cameraLocation = m_focusedComputer->GetActorLocation() + rotatedOffset;
+	cameraLocation.Z = EMPLOYEE_COMPUTER_SCREEN_HEIGHT;
 	// Camera looking at the computer's screen
-	if (ACameraActor* newCamera = GetWorld()->SpawnActor<ACameraActor>(ACameraActor::StaticClass(), cameraLocation, FRotator::ZeroRotator))
+	if (ACameraActor* newCamera = GetWorld()->SpawnActor<ACameraActor>(ACameraActor::StaticClass(), cameraLocation, cameraRotation))
 	{
-	// Switch player camera to the created camera
+		// Switch player camera to the created camera
 		APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 		playerController->SetViewTarget(newCamera);
 	}
