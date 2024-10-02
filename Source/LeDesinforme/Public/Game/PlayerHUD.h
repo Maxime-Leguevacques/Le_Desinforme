@@ -14,11 +14,11 @@ protected:
 	// Selected widget class to create
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UUserWidget> m_widgetHudClass;
-	// Instance of the created widget
 	UUserWidget* m_widgetHudInstance = nullptr;
 
 public:
 	virtual void BeginPlay() override;
+	void DrawHUD() override;
 
 	void UpdateTimer();
 	void UpdateScore();

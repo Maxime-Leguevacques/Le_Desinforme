@@ -10,7 +10,7 @@ ULeDesinformeGameInstance::ULeDesinformeGameInstance()
 void ULeDesinformeGameInstance::Init()
 {
 	Super::Init();
-	SetGameState(EGameState::Playing);
+	SetGameState(HomeMenu);
 }
 
 void ULeDesinformeGameInstance::OnGameStateChange()

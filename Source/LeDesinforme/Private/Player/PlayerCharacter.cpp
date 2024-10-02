@@ -11,6 +11,7 @@
 
 // The height of the employee's computer screen to set the player camera to when focused
 const float EMPLOYEE_COMPUTER_SCREEN_HEIGHT = 179.0f;
+const float OFFSET_FROM_COMPUTER_SCREEN = 75.0f;
 
 
 APlayerCharacter::APlayerCharacter()
@@ -150,7 +151,7 @@ void APlayerCharacter::ZoomEnd(const FInputActionValue& _value)
 	m_fovInterpolateSpeed = FMath::Abs(m_currentFov - m_targetFov) * m_zoomSpeed;
 	
 	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
-	gameState->GetUiController()->RemoveCursorFromScreen();
+	gameState->GetUiController()->HideInteractWidget();
 	
 }
 
@@ -207,20 +208,20 @@ void APlayerCharacter::DetectObjects()
 		{
 			m_focusedComputer = detectedComputer;
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
-			gameState->GetUiController()->AddCursorOnScreen();
+			gameState->GetUiController()->ShowInteractWidget();
 		}
 		else
 		{
 			m_focusedComputer = nullptr;
 			ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
-			gameState->GetUiController()->RemoveCursorFromScreen();
+			gameState->GetUiController()->HideInteractWidget();
 		}
 	}
 	else
 	{
 		m_focusedComputer = nullptr;
 		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
-		gameState->GetUiController()->RemoveCursorFromScreen();
+		gameState->GetUiController()->HideInteractWidget();
 	}
 }
 
@@ -228,7 +229,7 @@ void APlayerCharacter::FocusOnComputer()
 {
 	// Create a camera facing the computer
 	FRotator cameraRotation = m_focusedComputer-> GetActorForwardVector().Rotation() + FRotator(0.0f, -90.0f, 0.0f);
-	FVector offset = FVector(0.0f, 100.0f, 0.0f);
+	FVector offset = FVector(0.0f, OFFSET_FROM_COMPUTER_SCREEN, 0.0f);
 	FVector rotatedOffset = m_focusedComputer-> GetActorForwardVector().Rotation().RotateVector(offset);
 	FVector cameraLocation = m_focusedComputer->GetActorLocation() + rotatedOffset;
 	cameraLocation.Z = EMPLOYEE_COMPUTER_SCREEN_HEIGHT;

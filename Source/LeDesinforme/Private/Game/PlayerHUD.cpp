@@ -24,6 +24,13 @@ void APlayerHUD::BeginPlay()
 	}
 }
 
+void APlayerHUD::DrawHUD()
+{
+	// bool show = false;
+	// if (show)
+		// Super::DrawHUD();
+}
+
 void APlayerHUD::UpdateTimer()
 {
 	if (m_widgetHudInstance)

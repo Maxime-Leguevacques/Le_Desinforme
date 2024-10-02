@@ -3,6 +3,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Game/LeDesinformeGameInstance.h"
 #include "Game/LeDesinformeGameState.h"
+#include "GameFramework/HUD.h"
 
 
 class ALeDesinformeGameState;
@@ -61,40 +62,53 @@ void AUIController::BeginPlay()
 	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 	gameState->SetUiController(this);
 	switch (gameInstance->GetGameState()) {
-	case EGameState::HomeMenu:
+	case HomeMenu:
 		SetupHomeMenu();
 		break;
-	case EGameState::Playing:
+	case Playing:
 		SetupPlaying();
+		HidePlayingWidget();
 		break;
-	case EGameState::PauseMenu:
+	case PauseMenu:
 		break;
-	case EGameState::WinMenu:
+	case WinMenu:
 		break;
-	case EGameState::GameOverMenu:
+	case GameOverMenu:
 		break;
-	case EGameState::EndGameMenu:
+	case EndGameMenu:
 		break;
 	}
 }
 
-void AUIController::AddCursorOnScreen()
+#pragma region Widgets
+void AUIController::ShowPlayingWidget()
 {
-	if (m_cursorWidgetClass && !m_cursorWidgetInstance)
+	APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+}
+
+void AUIController::HidePlayingWidget()
+{
+	APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+}
+
+void AUIController::ShowInteractWidget()
+{
+	if (m_interactWidgetClass && !m_InteractWidgetInstance)
 	{
-		m_cursorWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), m_cursorWidgetClass);
-		if (m_cursorWidgetInstance)
+		m_InteractWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), m_interactWidgetClass);
+		if (m_InteractWidgetInstance)
 		{
-			m_cursorWidgetInstance->AddToViewport();
+			m_InteractWidgetInstance->AddToViewport();
 		}
 	}
 }
 
-void AUIController::RemoveCursorFromScreen()
+void AUIController::HideInteractWidget()
 {
-	if (m_cursorWidgetInstance && m_cursorWidgetInstance->IsInViewport())
+	if (m_InteractWidgetInstance && m_InteractWidgetInstance->IsInViewport())
 	{
-		m_cursorWidgetInstance->RemoveFromParent();
-		m_cursorWidgetInstance = nullptr;
+		m_InteractWidgetInstance->RemoveFromParent();
+		m_InteractWidgetInstance = nullptr;
 	}
 }
+#pragma endregion Widgets
