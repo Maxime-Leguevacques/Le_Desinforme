@@ -45,7 +45,7 @@ void APlayerCharacter::Tick(const float _deltaTime)
 		switch (m_cameraState) {
 		case Default:
 			break;
-		case Focused:
+		case Zooming:
 			DetectObjects();
 			break;
 		default:
@@ -68,6 +68,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* _playerInputCo
 		enhancedInputComponent->BindAction(m_iaZoom, ETriggerEvent::Started, this, &APlayerCharacter::ZoomStart);
 		enhancedInputComponent->BindAction(m_iaZoom, ETriggerEvent::Completed, this, &APlayerCharacter::ZoomEnd);
 		enhancedInputComponent->BindAction(m_iaInteract, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+		enhancedInputComponent->BindAction(m_iaExit, ETriggerEvent::Triggered, this, &APlayerCharacter::Exit);
 	}
 }
 
@@ -120,19 +121,22 @@ void APlayerCharacter::Move(const FInputActionValue& _value)
 
 void APlayerCharacter::Look(const FInputActionValue& _value)
 {
-	FVector2D lookVector = _value.Get<FVector2D>();
-	if (IsValid(Controller))
+	if (m_cameraState == Default || m_cameraState == Zooming)
 	{
-		AddControllerYawInput(lookVector.X);
-		AddControllerPitchInput(lookVector.Y);
+		FVector2D lookVector = _value.Get<FVector2D>();
+		if (IsValid(Controller))
+		{
+			AddControllerYawInput(lookVector.X);
+			AddControllerPitchInput(lookVector.Y);
+		}
 	}
 }
 
 void APlayerCharacter::ZoomStart(const FInputActionValue& _value)
 {
 
+	m_cameraState = Zooming;
 	// TODO : Check if m_isZooming is usefull
-	m_cameraState = Focused;
 	m_isZooming = true;
 	m_targetFov = m_zoomFov;
 	m_fovInterpolateSpeed = FMath::Abs(m_currentFov - m_targetFov) * m_zoomSpeed;
@@ -154,8 +158,20 @@ void APlayerCharacter::Interact(const FInputActionValue& _value)
 {
 	if (m_focusedComputer)
 	{
+		m_cameraState = Focused;
 		FocusOnComputer();
 	}
+}
+
+void APlayerCharacter::Exit(const FInputActionValue& _value)
+{
+	m_cameraState = Default;
+	// Hide UI
+	// Switch camera to player camera
+	APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+	playerController->SetViewTarget(this);
+	// Enable player movement
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 }
 #pragma endregion Input Action functions
 
@@ -222,6 +238,7 @@ void APlayerCharacter::FocusOnComputer()
 		// Switch player camera to the created camera
 		APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 		playerController->SetViewTarget(newCamera);
+		GetCharacterMovement()->SetMovementMode(MOVE_None);
 	}
 	// Disable player movement and rotation
 }

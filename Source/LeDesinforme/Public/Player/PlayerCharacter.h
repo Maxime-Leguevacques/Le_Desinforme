@@ -15,6 +15,7 @@ enum ECameraState
 {
 	// TODO : Check if Zooming can be a cameraState
 	Default		UMETA(DisplayName = "Default"),
+	Zooming		UMETA(DisplayName = "Zooming"),
 	Focused		UMETA(DisplayName = "FocusedOnScreen")
 };
 
@@ -50,7 +51,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* m_iaZoom;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	UInputAction* m_iaInteract;	
+	UInputAction* m_iaInteract;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* m_iaExit;
 #pragma endregion Input
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpringArm")
@@ -79,6 +82,7 @@ private:
 	void ZoomStart(const FInputActionValue& _value);
 	void ZoomEnd(const FInputActionValue& _value);
 	void Interact(const FInputActionValue& _value);
+	void Exit(const FInputActionValue& _value);
 #pragma endregion Input Action functions
 
 	void UpdateFov(float _deltaTime);
