@@ -23,6 +23,7 @@ void ALeDesinformeGameState::BeginPlay()
 	
 	ALeDesinformeGameMode* gameMode = Cast<ALeDesinformeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	m_timer = gameMode->GetDefaultTimerValue();
+	m_uiController->UpdateScore();
 }
 
 void ALeDesinformeGameState::Tick(float _deltaSeconds)

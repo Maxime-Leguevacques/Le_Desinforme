@@ -173,6 +173,8 @@ void APlayerCharacter::Exit(const FInputActionValue& _value)
 	playerController->SetViewTarget(this);
 	// Enable player movement
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+	gameState->GetUiController()->ShowHUDWidget();
 }
 #pragma endregion Input Action functions
 
@@ -236,11 +238,13 @@ void APlayerCharacter::FocusOnComputer()
 	// Camera looking at the computer's screen
 	if (ACameraActor* newCamera = GetWorld()->SpawnActor<ACameraActor>(ACameraActor::StaticClass(), cameraLocation, cameraRotation))
 	{
-		// Switch player camera to the created camera
+		// Disable player movement and rotation
 		APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 		playerController->SetViewTarget(newCamera);
 		GetCharacterMovement()->SetMovementMode(MOVE_None);
+		// Hide the HUD widget
+		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+		gameState->GetUiController()->HideHUDWidget();
 	}
-	// Disable player movement and rotation
 }
 

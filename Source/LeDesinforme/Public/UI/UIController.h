@@ -20,6 +20,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HomeMenuLevel")
 	TSubclassOf<UUserWidget> m_homeMenuWidgetClass;
 	UUserWidget* m_homeMenuWidgetInstance = nullptr;
+	// Selected widget class of hud to create
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	TSubclassOf<UUserWidget> m_HUDWidgetClass;
+	UUserWidget* m_HUDWidgetInstance = nullptr;
 	// Selected widget class of the cursor to create when zooming on a valid object
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
 	TSubclassOf<UUserWidget> m_interactWidgetClass;
@@ -35,10 +39,13 @@ private:
 	
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float _deltaSeconds) override;
 
 public:
-	void ShowPlayingWidget();
-	void HidePlayingWidget();
+	void ShowHUDWidget();
+	void HideHUDWidget();
 	void ShowInteractWidget();
 	void HideInteractWidget();
+
+	void UpdateScore();
 };

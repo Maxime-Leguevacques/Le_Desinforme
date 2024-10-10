@@ -6,7 +6,7 @@
 void UWidget_HUD::UpdateTimer(float _timer)
 {
 	// Whole part of timer
-	if (UTextBlock* textTimer = Cast<UTextBlock>(GetWidgetFromName(TEXT("Text_Timer_Whole"))))
+	if (UTextBlock* textTimer = Cast<UTextBlock>(GetWidgetFromName(TEXT("m_textTimerWhole"))))
 	{
 		int wholeTimerPart = FMath::FloorToInt(_timer);
 		if (wholeTimerPart >= 0)
@@ -17,7 +17,7 @@ void UWidget_HUD::UpdateTimer(float _timer)
 		}
 	}
 	// Decimal part of timer
-	if (UTextBlock* textTimer = Cast<UTextBlock>(GetWidgetFromName(TEXT("Text_Timer_Decimal"))))
+	if (UTextBlock* textTimer = Cast<UTextBlock>(GetWidgetFromName(TEXT("m_textTimerDecimal"))))
 	{
 		float fractionalPart = _timer - FMath::FloorToFloat(_timer);
 		int decimalPart = FMath::FloorToInt(fractionalPart * 10.f);
@@ -29,7 +29,7 @@ void UWidget_HUD::UpdateTimer(float _timer)
 
 void UWidget_HUD::UpdateScore(int _score)
 {
-	if (UTextBlock* textScore = Cast<UTextBlock>(GetWidgetFromName(TEXT("Text_Score"))))
+	if (UTextBlock* textScore = Cast<UTextBlock>(GetWidgetFromName(TEXT("m_textScore"))))
 	{
 		FText textScoreValue = FText::AsNumber(_score);
 		textScore->SetText(textScoreValue);

@@ -3,13 +3,14 @@
 #include "Blueprint/UserWidget.h"
 #include "Game/LeDesinformeGameInstance.h"
 #include "Game/LeDesinformeGameState.h"
-#include "GameFramework/HUD.h"
+#include "UI/Widget_HUD.h"
 
 
 class ALeDesinformeGameState;
 
 AUIController::AUIController()
 {
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AUIController::SetupHomeMenu()
@@ -61,13 +62,14 @@ void AUIController::BeginPlay()
 	ULeDesinformeGameInstance* gameInstance = Cast<ULeDesinformeGameInstance>(GetGameInstance());
 	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 	gameState->SetUiController(this);
+	// TODO : change since its on begin play
 	switch (gameInstance->GetGameState()) {
 	case HomeMenu:
 		SetupHomeMenu();
 		break;
 	case Playing:
 		SetupPlaying();
-		HidePlayingWidget();
+		ShowHUDWidget();
 		break;
 	case PauseMenu:
 		break;
@@ -80,16 +82,36 @@ void AUIController::BeginPlay()
 	}
 }
 
-#pragma region Widgets
-void AUIController::ShowPlayingWidget()
+void AUIController::Tick(float _deltaSeconds)
 {
-	APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+	Super::Tick(_deltaSeconds);
+	if (m_HUDWidgetInstance)
+	{
+		UWidget_HUD* hudWidget = Cast<UWidget_HUD>(m_HUDWidgetInstance);
+		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+		hudWidget->UpdateTimer(gameState->GetTimer());
+	}
 }
 
-void AUIController::HidePlayingWidget()
+#pragma region Widgets
+void AUIController::ShowHUDWidget()
 {
-	APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
-}
+	if (m_HUDWidgetClass && !m_HUDWidgetInstance)
+	{
+		m_HUDWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), m_HUDWidgetClass);
+		if (m_HUDWidgetInstance)
+		{
+			m_HUDWidgetInstance->AddToViewport();
+		}
+	}}
+
+void AUIController::HideHUDWidget()
+{
+	if (m_HUDWidgetInstance && m_HUDWidgetInstance->IsInViewport())
+	{
+		m_HUDWidgetInstance->RemoveFromParent();
+		m_HUDWidgetInstance = nullptr;
+	}}
 
 void AUIController::ShowInteractWidget()
 {
@@ -109,6 +131,16 @@ void AUIController::HideInteractWidget()
 	{
 		m_InteractWidgetInstance->RemoveFromParent();
 		m_InteractWidgetInstance = nullptr;
+	}
+}
+
+void AUIController::UpdateScore()
+{
+	if (m_HUDWidgetInstance)
+	{
+		UWidget_HUD* hudWidget = Cast<UWidget_HUD>(m_HUDWidgetInstance);
+		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
+		hudWidget->UpdateScore(gameState->GetScore());
 	}
 }
 #pragma endregion Widgets
