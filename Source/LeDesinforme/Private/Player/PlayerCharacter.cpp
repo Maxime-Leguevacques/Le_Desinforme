@@ -173,6 +173,13 @@ void APlayerCharacter::Exit(const FInputActionValue& _value)
 	playerController->SetViewTarget(this);
 	// Enable player movement
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+
+	if (m_focusedCamera)
+	{
+		m_focusedCamera->Destroy();
+		m_focusedCamera = nullptr;
+	}
+	
 	ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 	gameState->GetUiController()->ShowHUDWidget();
 }
@@ -235,16 +242,23 @@ void APlayerCharacter::FocusOnComputer()
 	FVector rotatedOffset = m_focusedComputer-> GetActorForwardVector().Rotation().RotateVector(offset);
 	FVector cameraLocation = m_focusedComputer->GetActorLocation() + rotatedOffset;
 	cameraLocation.Z = EMPLOYEE_COMPUTER_SCREEN_HEIGHT;
+
 	// Camera looking at the computer's screen
-	if (ACameraActor* newCamera = GetWorld()->SpawnActor<ACameraActor>(ACameraActor::StaticClass(), cameraLocation, cameraRotation))
+	if (m_focusedCamera == nullptr)
+	{
+		m_focusedCamera = GetWorld()->SpawnActor<ACameraActor>(ACameraActor::StaticClass(), cameraLocation, cameraRotation);
+	}
+
+	if (m_focusedCamera)
 	{
 		// Disable player movement and rotation
 		APlayerController* playerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
-		playerController->SetViewTarget(newCamera);
+		playerController->SetViewTarget(m_focusedCamera);
 		GetCharacterMovement()->SetMovementMode(MOVE_None);
 		// Hide the HUD widget
 		ALeDesinformeGameState* gameState = Cast<ALeDesinformeGameState>(GetWorld()->GetGameState());
 		gameState->GetUiController()->HideHUDWidget();
 	}
+	
 }
 

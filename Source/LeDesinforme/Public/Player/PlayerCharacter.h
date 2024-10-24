@@ -63,6 +63,7 @@ protected:
 	TEnumAsByte<ECameraState> m_cameraState;
 
 	class AComputer* m_focusedComputer = nullptr;
+	class ACameraActor* m_focusedCamera = nullptr;
 
 protected:
 	virtual void BeginPlay() override;

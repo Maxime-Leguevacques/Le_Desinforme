@@ -11,3 +11,6 @@ Making...
 - [ ] display write news when employee is at desk
 - [ ] create bad employee
 - [ ] bad employee behavior
+
+# Issues
+- [x] when exiting a computer, the created camera doesn't get deleted.
